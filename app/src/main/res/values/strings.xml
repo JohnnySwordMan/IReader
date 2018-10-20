@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">SmartX</string>
+    <string name="tab_home_page">首页</string>
+    <string name="tab_home_choose">精选</string>
+    <string name="tab_home_pic">项目</string>
+    <string name="tab_home_navigation">导航</string>
+    <string name="tab_home_me">我的</string>
+    <string name="install">安装</string>
+
+    <string name="loading_title">正在加载...</string>
+
+
+    <string name="scale_down_show_behavior">com.jaygege.smartx.widget.ScaleDownShowBehavior</string>
+
+</resources>

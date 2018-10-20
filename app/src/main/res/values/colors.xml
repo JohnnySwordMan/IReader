@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="smart_theme_primary_color">#FF5151</color>
+    <color name="colorPrimary">#FF36BC9B</color>
+    <color name="colorPrimaryDark">#FF36BC9B</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="white">#ffffff</color>
+    <color name="yellow">#f39c12</color>
+    <color name="delete_text">#cccccc</color>
+    <color name="title_black">#333333</color>
+    <color name="main_status_bar_blue">#279ede</color>
+    <color name="btn_click_bg">#22000000</color>
+    <color name="theme_primary_color">#FF5151</color>
+    <color name="text_normal">#666666</color>
+    <color name="colorBackground">#EEEEEE</color>
+    <color name="card_view">#FFFFFF</color>
+    <color name="text_black">#333333</color>
+    <color name="text_sub">#666666</color>
+    <color name="light_deep_red">#f9382a</color>
+    <color name="light_red">#e26d2e</color>
+    <color name="light_green">#3fc75f</color>
+    <color name="deep_red">#dc3b1f</color>
+    <color name="deep_grey">#e6e6e6</color>
+    <color name="common_line">#dddddd</color>
+    <color name="shallow_green">#FF36BC9B</color>
+    <color name="shallow_grey">#FF757575</color>
+    <color name="while_most_color">#e4e4e4</color>
+    <color name="loading_title_bg">#4DB7AC</color>
+
+    <color name="divide_line">#e5e5e5</color>
+    <color name="text_333">#333333</color>
+    <color name="text_666">#666666</color>
+</resources>
