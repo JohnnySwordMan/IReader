@@ -18,6 +18,7 @@ import com.jaygege.smartx.core.bean.home.collect.FeedArticleListEntity;
 import com.jaygege.smartx.presenter.main.HomePagePresenter;
 import com.jaygege.smartx.ui.main.adapter.FeedArticleListAdapter;
 import com.jaygege.smartx.utils.CollectionUtils;
+import com.jaygege.smartx.utils.TraceUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,7 +90,9 @@ public class HomeFragment extends BaseFragment<HomePagePresenter> implements Hom
         recyclerView.addOnScrollListener(new LoadMoreOnScrollListener() {
             @Override
             public void loadMoreData() {
+                TraceUtil.beginSection("loadMoreData");
                 mHomePagePresenter.loadMoreData();
+                TraceUtil.endSection();
             }
         });
     }
@@ -100,8 +103,10 @@ public class HomeFragment extends BaseFragment<HomePagePresenter> implements Hom
     @Override
     protected void initData() {
         super.initData();
+        TraceUtil.beginSection("initData");
         mHomePagePresenter.setCurrentPage(0);
         mHomePagePresenter.loadHomePageData();
+        TraceUtil.endSection();
     }
 
     @Override

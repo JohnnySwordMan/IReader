@@ -21,6 +21,7 @@ import com.jaygege.smartx.ui.main.fragment.HomeFragment;
 import com.jaygege.smartx.ui.me.fragment.MeFragment;
 import com.jaygege.smartx.ui.navigation.fragment.NavigationFragment;
 import com.jaygege.smartx.ui.project.fragment.ProjectFragment;
+import com.jaygege.smartx.utils.TraceUtil;
 
 
 /**
@@ -132,6 +133,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
 
     private void changeTab(int index) {
+        TraceUtil.beginSection("MainActivity-changeTab");
         // 如果想要切换的tab就是当前tab，则不继续执行
         if (mCurTabIndex == index) {
             return;
@@ -144,6 +146,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         ft.commitAllowingStateLoss();
         // 改变底部tab的选中状态
         setTabSelected(index);
+        TraceUtil.endSection();
     }
 
     private void setTabSelected(int index) {

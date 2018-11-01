@@ -14,6 +14,7 @@ import com.jaygege.smartx.core.bean.project.ProjectListEntity;
 import com.jaygege.smartx.presenter.project.ProjectListPagePresenter;
 import com.jaygege.smartx.ui.project.adapter.ProjectListAdapter;
 import com.jaygege.smartx.utils.CollectionUtils;
+import com.jaygege.smartx.utils.TraceUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,14 +86,17 @@ public class ProjectListFragment extends BaseFragment<ProjectListPagePresenter> 
     @Override
     protected void initData() {
         super.initData();
+        TraceUtil.beginSection("ProjectListFragment-initData");
         Bundle arguments = getArguments();
         id = arguments.getInt(KEY_TAB_ID);
         mPresenter.setCurrentPage(0, id);
         mPresenter.loadProjectListData();
+        TraceUtil.endSection();
     }
 
     @Override
     public void setData(ProjectListEntity entity) {
+        TraceUtil.beginSection("ProjectListFragment-setData");
         if (entity == null || CollectionUtils.isEmpty(entity.datas)) {
             showEmptyPage();
             return;
@@ -101,6 +105,7 @@ public class ProjectListFragment extends BaseFragment<ProjectListPagePresenter> 
         List<FeedArticleEntity> feedArticleEntities = entity.datas;
         entityList.addAll(feedArticleEntities);
         mAdapter.setData(entityList);
+        TraceUtil.endSection();
     }
 
     @Override

@@ -21,8 +21,8 @@ public class RetrofitUtils {
                 if (retrofit == null) {
                     retrofit = new Retrofit.Builder()
                             .baseUrl(baseUrl)
-                            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                            .addConverterFactory(GsonConverterFactory.create())
+                            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())  // 网络请求适配器，支持RxJava
+                            .addConverterFactory(GsonConverterFactory.create())   // 设置数据解析器
                             .build();
                 }
             }

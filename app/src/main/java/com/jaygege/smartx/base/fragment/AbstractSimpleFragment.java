@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.jaygege.smartx.SmartApp;
+import com.squareup.leakcanary.RefWatcher;
+
 /**
  * Created by Jaygege on 2018/9/20
  */
@@ -31,6 +34,13 @@ public abstract class AbstractSimpleFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = SmartApp.getRetWatcher(getActivity());
+        refWatcher.watch(this);
     }
 
     protected abstract int getLayoutId();
