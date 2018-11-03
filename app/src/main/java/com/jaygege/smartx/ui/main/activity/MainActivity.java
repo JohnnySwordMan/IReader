@@ -1,7 +1,6 @@
 package com.jaygege.smartx.ui.main.activity;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -25,7 +24,7 @@ import com.jaygege.smartx.utils.TraceUtil;
 
 
 /**
- * Created by Jaygege on 2018
+ * Created by geyan on 2018
  */
 public class MainActivity extends BaseActivity<MainPresenter> implements MainContract.View, View.OnClickListener {
 
@@ -129,6 +128,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         changeTab(curTabIndex);
         // 保存当前page
         mMainPresenter.setCurrentPage(Constant.TYPE_HOME_PAGE);
+        reportFullyDrawn();
     }
 
 

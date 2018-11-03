@@ -16,10 +16,13 @@ import com.jaygege.smartx.base.activity.BaseActivity;
 import com.jaygege.smartx.contract.LoginContract;
 import com.jaygege.smartx.core.bean.LoginEntity;
 import com.jaygege.smartx.presenter.LoginPresenter;
+import com.jaygege.smartx.ui.me.LoginMessageEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * 登录页面
- * Created by Jaygege on 2018/10/18
+ * Created by geyan on 2018/10/18
  */
 public class LoginActivity extends BaseActivity<LoginPresenter> implements LoginContract.View, View.OnClickListener {
 
@@ -30,6 +33,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     private Button mBtnLogin;
     private Button mBtnRegister;
     private LoginPresenter mPresenter;
+    private String userName;
 
     @Override
     protected LoginPresenter createPresenter() {
@@ -83,7 +87,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
      * 登录逻辑
      */
     private void actionLogin() {
-        String userName = mEtUserName.getText().toString().trim();
+        userName = mEtUserName.getText().toString().trim();
         String password = mEtPassword.getText().toString().trim();
         // 判空等操作全部交给Presenter，Activity只是用来显示页面的，尽量减少Activity中的逻辑操作
         mPresenter.login(userName, password);
@@ -92,6 +96,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @Override
     public void onLoginSuccess() {
         // 登录成功，告诉MeFragment，这里使用EventBus(EventBus最好还是少用，项目复杂的话，你都不知道哪是哪)
+        EventBus.getDefault().post(new LoginMessageEvent(200,userName));
         finish();
     }
 
