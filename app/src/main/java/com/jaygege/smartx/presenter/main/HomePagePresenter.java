@@ -1,6 +1,5 @@
 package com.jaygege.smartx.presenter.main;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.jaygege.smartx.base.Constant;
@@ -50,27 +49,21 @@ public class HomePagePresenter extends BasePresenter<HomePageContract.View> impl
     private void getArticleListDataFromNet() {
         // 设置当前页
         mGetArticleListDataFromNet.setRequest(mCurrentPage);
-        Log.d("HomePage", "HomePresenter---getArticleListDataFromNet---currentPage = " + mCurrentPage);
         mGetArticleListDataFromNet.execute(new Subscriber<FeedArticleListEntity>() {
 
             @Override
             public void onCompleted() {
-                Log.d("HomePage", "articleList---onComplete");
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.d("HomePage", "articleList---onError = " + e.toString());
-                mView.onFailure();
+                getView().onFailure();
             }
 
             @Override
             public void onNext(FeedArticleListEntity feedArticleListEntity) {
-                Log.d("HomePage", "feedArticleListEntity---size = " + feedArticleListEntity.datas.size());
-                Log.d("HomePage", "feedArticleListEntity---" + feedArticleListEntity.datas.get(0).title);
-
-                mView.onSuccess();
-                mView.setData(mBannerEntityList, feedArticleListEntity);
+                getView().onSuccess();
+                getView().setData(mBannerEntityList, feedArticleListEntity);
             }
         });
     }
@@ -83,13 +76,11 @@ public class HomePagePresenter extends BasePresenter<HomePageContract.View> impl
 
             @Override
             public void onCompleted() {
-                Log.d("HomePage", "banner---onComplete");
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.d("HomePage", "banner---onError = " + e.toString());
-                mView.onFailure();
+                getView().onFailure();
             }
 
             @Override
@@ -130,14 +121,14 @@ public class HomePagePresenter extends BasePresenter<HomePageContract.View> impl
 
             @Override
             public void onError(Throwable e) {
-                mView.onFailure();
+                getView().onFailure();
             }
 
             @Override
             public void onNext(FeedArticleListEntity feedArticleListEntity) {
-                mView.onSuccess();
+                getView().onSuccess();
                 entity = feedArticleListEntity;
-                mView.setData(feedArticleListEntity);
+                getView().setData(feedArticleListEntity);
             }
         });
     }

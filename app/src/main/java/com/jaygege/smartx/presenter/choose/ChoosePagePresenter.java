@@ -41,12 +41,12 @@ public class ChoosePagePresenter extends BasePresenter<ChoosePageContract.View> 
 
             @Override
             public void onError(Throwable e) {
-                mView.onFailure();
+                getView().onFailure();
             }
 
             @Override
             public void onNext(List<KnowledgeHierarchyEntity> knowledgeHierarchyEntities) {
-                mView.setData(knowledgeHierarchyEntities);
+                getView().setData(knowledgeHierarchyEntities);
             }
         });
     }

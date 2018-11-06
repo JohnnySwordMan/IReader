@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Jaygege on 2018
+ * Created by geyan on 2018
  */
 public class NavigationFragment extends BaseFragment<NavigationPagePresenter> implements NavigationPageContract.View {
 

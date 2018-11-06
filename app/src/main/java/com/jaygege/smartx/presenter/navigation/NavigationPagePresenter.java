@@ -33,12 +33,12 @@ public class NavigationPagePresenter extends BasePresenter<NavigationPageContrac
 
             @Override
             public void onError(Throwable e) {
-                mView.onFailure();
+                getView().onFailure();
             }
 
             @Override
             public void onNext(List<NavigationListEntity> navigationListEntities) {
-                mView.showNavigationData(navigationListEntities);
+                getView().showNavigationData(navigationListEntities);
             }
         });
     }

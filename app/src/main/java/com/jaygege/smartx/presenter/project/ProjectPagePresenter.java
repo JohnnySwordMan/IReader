@@ -39,12 +39,12 @@ public class ProjectPagePresenter extends BasePresenter<ProjectPageContract.View
 
             @Override
             public void onError(Throwable e) {
-                mView.onFailure();
+                getView().onFailure();
             }
 
             @Override
             public void onNext(List<ProjectTabEntity> projectTabEntities) {
-                mView.updateTabTitles(projectTabEntities);
+                getView().updateTabTitles(projectTabEntities);
             }
         });
     }

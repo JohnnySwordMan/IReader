@@ -27,11 +27,11 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.View> impl
     @Override
     public void register(String userName, String password, String rePassword) {
         if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(password) || TextUtils.isEmpty(rePassword)) {
-            mView.showErrorMsg("用户名、密码不能为空");
+            getView().showErrorMsg("用户名、密码不能为空");
             return;
         }
         if (!password.equals(rePassword)) {
-            mView.showErrorMsg("两次密码不一致");
+            getView().showErrorMsg("两次密码不一致");
             return;
         }
         mGetRegisterDataFromNet.setRequest(userName, password, rePassword);
@@ -45,16 +45,16 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.View> impl
             @Override
             public void onError(Throwable e) {
                 Log.d("register", "onError");
-                mView.onFailure(e);
+                getView().onFailure(e);
             }
 
             @Override
             public void onNext(LoginEntity loginEntity) {
                 Log.d("register", "注册成功 = " + loginEntity.toString());
                 if (loginEntity != null) {
-                    mView.onSuccess(loginEntity);
+                    getView().onSuccess(loginEntity);
                 } else {
-                    mView.showErrorMsg("注册失败");
+                    getView().showErrorMsg("注册失败");
                 }
             }
         });

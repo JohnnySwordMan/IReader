@@ -54,7 +54,7 @@ public class KnowledgeHierarchyDetailListPresenter extends BasePresenter<Knowled
 
             @Override
             public void onNext(FeedArticleListEntity feedArticleListEntity) {
-                mView.showData(feedArticleListEntity);
+                getView().showData(feedArticleListEntity);
             }
         });
     }
@@ -90,7 +90,7 @@ public class KnowledgeHierarchyDetailListPresenter extends BasePresenter<Knowled
             @Override
             public void onNext(FeedArticleListEntity feedArticleListEntity) {
                 entity = feedArticleListEntity;
-                mView.showData(feedArticleListEntity);
+                getView().showData(feedArticleListEntity);
             }
         });
     }

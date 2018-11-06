@@ -29,7 +29,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
     public void login(String userName, String password) {
 
         if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(password)) {
-            mView.showErrorMsg("用户名、密码不能为空");
+            getView().showErrorMsg("用户名、密码不能为空");
             return;
         }
         mGetLoginDataFromNet.setRequest(userName, password);
@@ -41,13 +41,13 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
             }
             @Override
             public void onError(Throwable e) {
-                mView.onLoginFailure("用户名、密码错误");
+                getView().onLoginFailure("用户名、密码错误");
             }
 
             @Override
             public void onNext(LoginEntity loginEntity) {
                 Log.d("Login", "userName = " + loginEntity.username + ", password = " + loginEntity.password);
-                mView.onLoginSuccess();
+                getView().onLoginSuccess();
             }
         });
     }

@@ -70,7 +70,7 @@ public class ProjectListPagePresenter extends BasePresenter<ProjectListPageContr
             @Override
             public void onNext(ProjectListEntity projectListEntity) {
                 entity = projectListEntity;
-                mView.setData(projectListEntity);
+                getView().setData(projectListEntity);
             }
         });
     }
@@ -86,12 +86,12 @@ public class ProjectListPagePresenter extends BasePresenter<ProjectListPageContr
 
             @Override
             public void onError(Throwable e) {
-                mView.onFailure();
+                getView().onFailure();
             }
 
             @Override
             public void onNext(ProjectListEntity projectListEntity) {
-                mView.setData(projectListEntity);
+                getView().setData(projectListEntity);
             }
         });
     }
