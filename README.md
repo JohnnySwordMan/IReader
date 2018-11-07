@@ -1,2 +1,1 @@
-# WanAndroid客户端的练手项目  
-1. RxJava1升级成RxJava2
+# WanAndroid客户端的练手项目
