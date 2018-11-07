@@ -1,23 +1,24 @@
 package com.jaygege.smartx.presenter.choose;
 
+import com.jaygege.smartx.base.DataManager;
 import com.jaygege.smartx.base.presenter.BasePresenter;
 import com.jaygege.smartx.contract.choose.ChoosePageContract;
 import com.jaygege.smartx.core.bean.choose.KnowledgeHierarchyEntity;
-import com.jaygege.smartx.core.httpUseCase.choose.GetKnowledgeHierarchyDataFromNet;
+import com.jaygege.smartx.utils.RxJavaUtils;
 
 import java.util.List;
 
-import rx.Subscriber;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
-/**
- * Created by geyan on 2018/9/26
- */
 public class ChoosePagePresenter extends BasePresenter<ChoosePageContract.View> implements ChoosePageContract.Presenter {
+    private final DataManager dataManager;
 
-    private final GetKnowledgeHierarchyDataFromNet mGetKnowledgeHierarchyDataFromNet;
+//    private final GetKnowledgeHierarchyDataFromNet mGetKnowledgeHierarchyDataFromNet;
 
     public ChoosePagePresenter() {
-        mGetKnowledgeHierarchyDataFromNet = new GetKnowledgeHierarchyDataFromNet();
+//        mGetKnowledgeHierarchyDataFromNet = new GetKnowledgeHierarchyDataFromNet();
+        dataManager = DataManager.getInstance();
     }
 
     @Override
@@ -32,22 +33,38 @@ public class ChoosePagePresenter extends BasePresenter<ChoosePageContract.View> 
     }
 
     private void getKnowledgeHierarchyData() {
-        mGetKnowledgeHierarchyDataFromNet.execute(new Subscriber<List<KnowledgeHierarchyEntity>>() {
 
-            @Override
-            public void onCompleted() {
+        Disposable subscriber = dataManager.getHttpService().getKnowledgeHierarchyList().compose(RxJavaUtils.applySchedulers())
+                .compose(RxJavaUtils.handleResult())
+                .subscribe(new Consumer<List<KnowledgeHierarchyEntity>>() {
+                    @Override
+                    public void accept(List<KnowledgeHierarchyEntity> knowledgeHierarchyEntities) throws Exception {
+                        getView().setData(knowledgeHierarchyEntities);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        getView().onFailure();
+                    }
+                });
+        addSubscriber(subscriber);
 
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                getView().onFailure();
-            }
-
-            @Override
-            public void onNext(List<KnowledgeHierarchyEntity> knowledgeHierarchyEntities) {
-                getView().setData(knowledgeHierarchyEntities);
-            }
-        });
+//        mGetKnowledgeHierarchyDataFromNet.execute(new Subscriber<List<KnowledgeHierarchyEntity>>() {
+//
+//            @Override
+//            public void onCompleted() {
+//
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                getView().onFailure();
+//            }
+//
+//            @Override
+//            public void onNext(List<KnowledgeHierarchyEntity> knowledgeHierarchyEntities) {
+//                getView().setData(knowledgeHierarchyEntities);
+//            }
+//        });
     }
 }

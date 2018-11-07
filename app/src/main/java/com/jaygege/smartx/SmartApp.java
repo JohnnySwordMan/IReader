@@ -3,6 +3,7 @@ package com.jaygege.smartx;
 import android.app.Application;
 import android.content.Context;
 
+import com.jaygege.smartx.base.DataManager;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -22,6 +23,7 @@ public class SmartApp extends Application {
         setDebug(true);
         // 可以直接检测Activity
         refWatcher = LeakCanary.install(this);
+        DataManager.getInstance().init();
     }
 
     // Fragment的检测需要使用该方法

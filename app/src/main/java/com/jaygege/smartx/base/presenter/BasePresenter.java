@@ -5,6 +5,9 @@ import com.jaygege.smartx.base.view.AbstractView;
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+
 /**
  * BasePresenter
  * Created by geyan on 2018
@@ -12,7 +15,8 @@ import java.lang.ref.WeakReference;
 public abstract class BasePresenter<T extends AbstractView> implements AbstractPresenter<T> {
 
     protected Reference<T> mViewRef;
-//    protected T mView;
+    private CompositeDisposable compositeDisposable;
+    //    protected T mView;
 
     public BasePresenter() {
     }
@@ -27,7 +31,6 @@ public abstract class BasePresenter<T extends AbstractView> implements AbstractP
     @Override
     public void attachView(T view) {
         mViewRef = new WeakReference<>(view);
-//        this.mView = view;
     }
 
     @Override
@@ -36,7 +39,17 @@ public abstract class BasePresenter<T extends AbstractView> implements AbstractP
             mViewRef.clear();
             mViewRef = null;
         }
-        // 上述意思是在这里，设置mView = null，不就可以解决内存泄漏了吗？ 这个问题就在于不是所有情况下都会执行Activity的onDestroy方法的
+        // 取消订阅
+        if(compositeDisposable != null){
+            compositeDisposable.clear();
+        }
+    }
+
+    public void addSubscriber(Disposable disposable){
+        if(compositeDisposable == null){
+            compositeDisposable = new CompositeDisposable();
+        }
+        compositeDisposable.add(disposable);
     }
 
     @Override

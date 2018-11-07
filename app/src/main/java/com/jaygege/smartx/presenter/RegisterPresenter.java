@@ -2,26 +2,28 @@ package com.jaygege.smartx.presenter;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
+import com.jaygege.smartx.base.DataManager;
 import com.jaygege.smartx.base.presenter.BasePresenter;
 import com.jaygege.smartx.contract.RegisterContract;
 import com.jaygege.smartx.core.bean.LoginEntity;
-import com.jaygege.smartx.core.httpUseCase.GetRegisterDataFromNet;
+import com.jaygege.smartx.utils.RxJavaUtils;
 
-import rx.Subscriber;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by Jaygege on 2018/10/18
  */
 public class RegisterPresenter extends BasePresenter<RegisterContract.View> implements RegisterContract.Presenter {
 
-    private final GetRegisterDataFromNet mGetRegisterDataFromNet;
     private Context mContext;
+    private final DataManager dataManager;
 
     public RegisterPresenter(Context context) {
         this.mContext = context;
-        mGetRegisterDataFromNet = new GetRegisterDataFromNet();
+//        mGetRegisterDataFromNet = new GetRegisterDataFromNet();
+        dataManager = DataManager.getInstance();
     }
 
     @Override
@@ -34,29 +36,51 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.View> impl
             getView().showErrorMsg("两次密码不一致");
             return;
         }
-        mGetRegisterDataFromNet.setRequest(userName, password, rePassword);
-        mGetRegisterDataFromNet.execute(new Subscriber<LoginEntity>() {
 
-            @Override
-            public void onCompleted() {
+        Disposable subcriber = dataManager.getHttpService().getRegisterData(userName, password, rePassword)
+                .compose(RxJavaUtils.applySchedulers())
+                .compose(RxJavaUtils.handleResult())
+                .subscribe(new Consumer<LoginEntity>() {
+                    @Override
+                    public void accept(LoginEntity loginEntity) throws Exception {
+                        if (loginEntity != null) {
+                            getView().onSuccess(loginEntity);
+                        } else {
+                            getView().showErrorMsg("注册失败");
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        getView().onFailure(throwable);
+                    }
+                });
 
-            }
+        addSubscriber(subcriber);
 
-            @Override
-            public void onError(Throwable e) {
-                Log.d("register", "onError");
-                getView().onFailure(e);
-            }
-
-            @Override
-            public void onNext(LoginEntity loginEntity) {
-                Log.d("register", "注册成功 = " + loginEntity.toString());
-                if (loginEntity != null) {
-                    getView().onSuccess(loginEntity);
-                } else {
-                    getView().showErrorMsg("注册失败");
-                }
-            }
-        });
+//        mGetRegisterDataFromNet.setRequest(userName, password, rePassword);
+//        mGetRegisterDataFromNet.execute(new Subscriber<LoginEntity>() {
+//
+//            @Override
+//            public void onCompleted() {
+//
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                Log.d("register", "onError");
+//                getView().onFailure(e);
+//            }
+//
+//            @Override
+//            public void onNext(LoginEntity loginEntity) {
+//                Log.d("register", "注册成功 = " + loginEntity.toString());
+//                if (loginEntity != null) {
+//                    getView().onSuccess(loginEntity);
+//                } else {
+//                    getView().showErrorMsg("注册失败");
+//                }
+//            }
+//        });
     }
 }

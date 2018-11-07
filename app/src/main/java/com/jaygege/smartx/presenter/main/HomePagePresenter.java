@@ -1,17 +1,23 @@
 package com.jaygege.smartx.presenter.main;
 
+import android.support.annotation.NonNull;
+
 import com.jaygege.smartx.base.Constant;
+import com.jaygege.smartx.base.DataManager;
 import com.jaygege.smartx.base.presenter.BasePresenter;
+import com.jaygege.smartx.base.response.BaseResponse;
 import com.jaygege.smartx.contract.main.HomePageContract;
 import com.jaygege.smartx.core.bean.home.banner.BannerEntity;
 import com.jaygege.smartx.core.bean.home.collect.FeedArticleListEntity;
-import com.jaygege.smartx.core.httpUseCase.home.GetArticleListDataFromNet;
-import com.jaygege.smartx.core.httpUseCase.home.GetBannerDataFromNet;
 import com.jaygege.smartx.ui.main.adapter.FeedArticleListAdapter;
+import com.jaygege.smartx.utils.RxJavaUtils;
 
+import java.util.HashMap;
 import java.util.List;
 
-import rx.Subscriber;
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by geyan on 2018/9/20
@@ -19,18 +25,16 @@ import rx.Subscriber;
 public class HomePagePresenter extends BasePresenter<HomePageContract.View> implements HomePageContract.Presenter {
 
 
-    public GetBannerDataFromNet mGetBannerDataFromNet;
-    public GetArticleListDataFromNet mGetArticleListDataFromNet;
     private boolean isRefresh = true;
     // 当前页
     private int mCurrentPage = 0;
-    private List<BannerEntity> mBannerEntityList;
     private FeedArticleListAdapter mAdapter;
+    private final DataManager mDataManager;
+    private FeedArticleListEntity entity;
 
     public HomePagePresenter(FeedArticleListAdapter adapter) {
         this.mAdapter = adapter;
-        mGetBannerDataFromNet = new GetBannerDataFromNet();
-        mGetArticleListDataFromNet = new GetArticleListDataFromNet();
+        mDataManager = DataManager.getInstance();
     }
 
     public void setCurrentPage(int currentPage) {
@@ -40,60 +44,44 @@ public class HomePagePresenter extends BasePresenter<HomePageContract.View> impl
 
     @Override
     public void loadHomePageData() {
-        // 请求banner数据和列表数据
-        getBannerDataFromNet();
-    }
-
-    private void getArticleListDataFromNet() {
-        // 设置当前页
-        mGetArticleListDataFromNet.setRequest(mCurrentPage);
-        mGetArticleListDataFromNet.execute(new Subscriber<FeedArticleListEntity>() {
-
-            @Override
-            public void onCompleted() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                getView().onFailure();
-            }
-
-            @Override
-            public void onNext(FeedArticleListEntity feedArticleListEntity) {
-                getView().onSuccess();
-                getView().setData(mBannerEntityList, feedArticleListEntity);
-            }
-        });
+        Observable<BaseResponse<List<BannerEntity>>> bannerData = mDataManager.getHttpService().getBannerData();
+        Observable<BaseResponse<FeedArticleListEntity>> feedArticleList = mDataManager.getHttpService().getFeedArticleList(mCurrentPage);
+        Disposable subscriber = Observable.zip(bannerData, feedArticleList, (bannerResponse, feedArticleListResponse) -> createResponseMap(bannerResponse,
+                feedArticleListResponse)).compose(RxJavaUtils.applySchedulers())
+                .subscribe(new Consumer<HashMap<String, Object>>() {
+                               @Override
+                               public void accept(HashMap<String, Object> map) throws Exception {
+                                   BaseResponse<List<BannerEntity>> bannerDataResponse = (BaseResponse<List<BannerEntity>>) map.get("banner_data");
+                                   BaseResponse<FeedArticleListEntity> feedArticleListEntityResponse = (BaseResponse<FeedArticleListEntity>) map.get("article_data");
+                                   if (bannerDataResponse != null && bannerDataResponse.getData() != null && feedArticleListEntityResponse != null
+                                           && feedArticleListEntityResponse.getData() != null) {
+                                       getView().onSuccess();
+                                       getView().setData(bannerDataResponse.getData(), feedArticleListEntityResponse.getData());
+                                   }
+                               }
+                           }, throwable -> getView().onFailure()
+                );
+        addSubscriber(subscriber);
     }
 
     /**
-     * 请求banner数据
+     * 需要将banner数据和文章list数据整合到一起
      */
-    private void getBannerDataFromNet() {
-        mGetBannerDataFromNet.execute(new Subscriber<List<BannerEntity>>() {
-
-            @Override
-            public void onCompleted() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                getView().onFailure();
-            }
-
-            @Override
-            public void onNext(List<BannerEntity> bannerEntityList) {
-                mBannerEntityList = bannerEntityList;
-                getArticleListDataFromNet();
-            }
-        });
+    @NonNull
+    private HashMap<String, Object> createResponseMap(
+            BaseResponse<List<BannerEntity>> bannerResponse,
+            BaseResponse<FeedArticleListEntity> feedArticleListResponse) {
+        HashMap<String, Object> map = new HashMap<>(2);
+        map.put("banner_data", bannerResponse);
+        map.put("article_data", feedArticleListResponse);
+        return map;
     }
 
     public void setRefresh() {
         isRefresh = true;
         // 下拉刷新，需要将当前页置为0
         mCurrentPage = 0;
-        getBannerDataFromNet();
+        loadHomePageData();
     }
 
     /**
@@ -103,31 +91,22 @@ public class HomePagePresenter extends BasePresenter<HomePageContract.View> impl
         mAdapter.setLoadingState(Constant.LOADING);
         isRefresh = false;
         mCurrentPage++;
-        // 设置当前页
-        mGetArticleListDataFromNet.setRequest(mCurrentPage);
-        mGetArticleListDataFromNet.execute(new Subscriber<FeedArticleListEntity>() {
 
-            private FeedArticleListEntity entity;
-
-            @Override
-            public void onCompleted() {
-                mAdapter.setLoadingState(Constant.LOADING_COMPLETE);
-                if (entity != null) {
-                    mAdapter.setLoadingState(entity.over ? Constant.LOADING_END : Constant.LOADING_COMPLETE);
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                getView().onFailure();
-            }
-
-            @Override
-            public void onNext(FeedArticleListEntity feedArticleListEntity) {
-                getView().onSuccess();
-                entity = feedArticleListEntity;
-                getView().setData(feedArticleListEntity);
-            }
-        });
+        Disposable subscribe = mDataManager.getHttpService().getFeedArticleList(mCurrentPage).compose(RxJavaUtils.applySchedulers())
+                .compose(RxJavaUtils.handleResult())
+                .subscribe(new Consumer<FeedArticleListEntity>() {
+                    @Override
+                    public void accept(FeedArticleListEntity feedArticleListEntity) throws Exception {
+                        getView().onSuccess();
+                        entity = feedArticleListEntity;
+                        getView().setData(feedArticleListEntity);
+                    }
+                }, throwable -> getView().onFailure(), () -> {
+                    mAdapter.setLoadingState(Constant.LOADING_COMPLETE);
+                    if (entity != null) {
+                        mAdapter.setLoadingState(entity.over ? Constant.LOADING_END : Constant.LOADING_COMPLETE);
+                    }
+                });
+        addSubscriber(subscribe);
     }
 }

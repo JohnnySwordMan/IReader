@@ -1,32 +1,29 @@
 package com.jaygege.smartx.base.response;
 
-/**
- * Created by geyan on 2018/9/20
- */
 public class BaseResponse<T> {
 
     public static final int SUCCESS = 0;
     public static final int FAIL = 1;
 
     // 0-成功；1-失败
-    private int errorCode;
-    private String errorMsg;
+    private int code;
+    private String message;
     private T data;
 
-    public int getErrorCode() {
-        return errorCode;
+    public int getCode() {
+        return code;
     }
 
-    public void setErrorCode(int errorCode) {
-        this.errorCode = errorCode;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public String getErrorMsg() {
-        return errorMsg;
+    public String getMessage() {
+        return message;
     }
 
-    public void setErrorMsg(String errorMsg) {
-        this.errorMsg = errorMsg;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public T getData() {
@@ -36,6 +33,4 @@ public class BaseResponse<T> {
     public void setData(T data) {
         this.data = data;
     }
-
-
 }

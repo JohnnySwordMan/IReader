@@ -1,15 +1,18 @@
 package com.jaygege.smartx.presenter.choose;
 
-import android.util.Log;
 
 import com.jaygege.smartx.base.Constant;
+import com.jaygege.smartx.base.DataManager;
 import com.jaygege.smartx.base.presenter.BasePresenter;
 import com.jaygege.smartx.contract.choose.KnowledgeHierarchyDetailListContract;
 import com.jaygege.smartx.core.bean.home.collect.FeedArticleListEntity;
-import com.jaygege.smartx.core.httpUseCase.choose.GetKnowledgeHierarchyListDataFromNet;
 import com.jaygege.smartx.ui.choose.adapter.KnowledgeHierarchyDetailListAdapter;
+import com.jaygege.smartx.utils.RxJavaUtils;
 
-import rx.Subscriber;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+
 
 /**
  * Created by geyan on 2018/9/29
@@ -18,13 +21,14 @@ public class KnowledgeHierarchyDetailListPresenter extends BasePresenter<Knowled
 
     private int currentPage = 0;
     private int cid;
-    private final GetKnowledgeHierarchyListDataFromNet mGetknowledgeHierarchyListDataFromNet;
     private KnowledgeHierarchyDetailListAdapter mAdapter;
+    private final DataManager dataManager;
+    private FeedArticleListEntity entity;
 
 
     public KnowledgeHierarchyDetailListPresenter(KnowledgeHierarchyDetailListAdapter adapter) {
         this.mAdapter = adapter;
-        mGetknowledgeHierarchyListDataFromNet = new GetKnowledgeHierarchyListDataFromNet();
+        dataManager = DataManager.getInstance();
     }
 
     @Override
@@ -39,24 +43,41 @@ public class KnowledgeHierarchyDetailListPresenter extends BasePresenter<Knowled
     }
 
     private void getKnowledgeHierarchyListDataFromNet() {
-        mGetknowledgeHierarchyListDataFromNet.setRequest(currentPage, cid);
-        mGetknowledgeHierarchyListDataFromNet.execute(new Subscriber<FeedArticleListEntity>() {
 
-            @Override
-            public void onCompleted() {
+        Disposable subscriber = dataManager.getHttpService().getKnowledgeHierarchyListData(currentPage, cid)
+                .compose(RxJavaUtils.applySchedulers())
+                .compose(RxJavaUtils.handleResult())
+                .subscribe(new Consumer<FeedArticleListEntity>() {
+                    @Override
+                    public void accept(FeedArticleListEntity feedArticleListEntity) throws Exception {
+                        getView().showData(feedArticleListEntity);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
 
-            }
+                    }
+                });
+        addSubscriber(subscriber);
 
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(FeedArticleListEntity feedArticleListEntity) {
-                getView().showData(feedArticleListEntity);
-            }
-        });
+//        mGetknowledgeHierarchyListDataFromNet.setRequest(currentPage, cid);
+//        mGetknowledgeHierarchyListDataFromNet.execute(new Subscriber<FeedArticleListEntity>() {
+//
+//            @Override
+//            public void onCompleted() {
+//
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//
+//            }
+//
+//            @Override
+//            public void onNext(FeedArticleListEntity feedArticleListEntity) {
+//                getView().showData(feedArticleListEntity);
+//            }
+//        });
     }
 
     @Override
@@ -70,29 +91,54 @@ public class KnowledgeHierarchyDetailListPresenter extends BasePresenter<Knowled
     public void loadMoreData() {
         mAdapter.setLoadingState(Constant.LOADING);
         currentPage++;
-        mGetknowledgeHierarchyListDataFromNet.setRequest(currentPage, cid);
-        mGetknowledgeHierarchyListDataFromNet.execute(new Subscriber<FeedArticleListEntity>() {
 
-            private FeedArticleListEntity entity;
+        Disposable subscriber = dataManager.getHttpService().getKnowledgeHierarchyListData(currentPage, cid)
+                .compose(RxJavaUtils.applySchedulers())
+                .compose(RxJavaUtils.handleResult())
+                .subscribe(new Consumer<FeedArticleListEntity>() {
+                    @Override
+                    public void accept(FeedArticleListEntity feedArticleListEntity) throws Exception {
+                        entity = feedArticleListEntity;
+                        getView().showData(feedArticleListEntity);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
 
-            @Override
-            public void onCompleted() {
-                if (entity != null) {
-                    mAdapter.setLoadingState(entity.over ? Constant.LOADING_END : Constant.LOADING_COMPLETE);
-                }
-            }
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        if (entity != null) {
+                            mAdapter.setLoadingState(entity.over ? Constant.LOADING_END : Constant.LOADING_COMPLETE);
+                        }
+                    }
+                });
+        addSubscriber(subscriber);
 
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(FeedArticleListEntity feedArticleListEntity) {
-                entity = feedArticleListEntity;
-                getView().showData(feedArticleListEntity);
-            }
-        });
+//        mGetknowledgeHierarchyListDataFromNet.setRequest(currentPage, cid);
+//        mGetknowledgeHierarchyListDataFromNet.execute(new Subscriber<FeedArticleListEntity>() {
+//
+//            private FeedArticleListEntity entity;
+//
+//            @Override
+//            public void onCompleted() {
+//                if (entity != null) {
+//                    mAdapter.setLoadingState(entity.over ? Constant.LOADING_END : Constant.LOADING_COMPLETE);
+//                }
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//
+//            }
+//
+//            @Override
+//            public void onNext(FeedArticleListEntity feedArticleListEntity) {
+//                entity = feedArticleListEntity;
+//                getView().showData(feedArticleListEntity);
+//            }
+//        });
     }
 
 }
