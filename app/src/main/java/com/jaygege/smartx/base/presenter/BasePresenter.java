@@ -36,6 +36,7 @@ public abstract class BasePresenter<T extends AbstractView> implements AbstractP
             mViewRef.clear();
             mViewRef = null;
         }
+        // 上述意思是在这里，设置mView = null，不就可以解决内存泄漏了吗？ 这个问题就在于不是所有情况下都会执行Activity的onDestroy方法的
     }
 
     @Override

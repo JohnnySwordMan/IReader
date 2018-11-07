@@ -10,10 +10,10 @@ import rx.subscriptions.Subscriptions;
  */
 public abstract class AbstractNetRxHttp {
 
-    protected Subscription subscription = Subscriptions.empty();
+//    protected Subscription subscription = Subscriptions.empty();
 
-    public void execute(Subscriber subscriber) {
-        subscription = createObservable().subscribe(subscriber);
+    public Subscription execute(Subscriber subscriber) {
+        return createObservable().subscribe(subscriber);
     }
 
     protected abstract Observable createObservable();

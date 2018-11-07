@@ -1,7 +1,5 @@
 package com.jaygege.smartx.presenter.main;
 
-import android.util.Log;
-
 import com.jaygege.smartx.base.Constant;
 import com.jaygege.smartx.base.presenter.BasePresenter;
 import com.jaygege.smartx.contract.main.HomePageContract;
