@@ -1,8 +1,5 @@
 package com.jaygege.smartx.utils;
 
-import android.annotation.TargetApi;
-import android.os.Build;
-
 import com.jaygege.smartx.base.exception.ApiException;
 import com.jaygege.smartx.base.exception.CustomException;
 import com.jaygege.smartx.base.response.BaseResponse;
@@ -36,7 +33,6 @@ public class RxJavaUtils {
         return upstream -> upstream.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-
 
     private static class ResponseFunction<T> implements Function<BaseResponse<T>, ObservableSource<T>> {
 

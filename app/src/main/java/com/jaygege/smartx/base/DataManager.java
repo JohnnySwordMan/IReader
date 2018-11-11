@@ -29,6 +29,7 @@ public class DataManager {
     // 这边不需要单例，因为init只会在application中执行
     public void init() {
         // 这里可以添加拦截器，后续我会添加加密解密的拦截器
+        // 加密解密拦截器，两种实现方式都写一下
         OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
 
         retrofit = new Retrofit.Builder()
