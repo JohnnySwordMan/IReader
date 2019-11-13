@@ -14,7 +14,7 @@ public class Constant {
 
     public static final String ARTICLE_ENTITY = "article_entity";
 
-    public static final String BASE_URL = "http://www.wanandroid.com/";
+    public static final String BASE_URL = "https://www.wanandroid.com/";
 
     // 跳转到ArticleDetailActivity，所需要的参数
     public static final String ARTICLE_ID = "article_id";
