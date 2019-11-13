@@ -1,9 +1,10 @@
 package com.abyte.wanandroid.ui.project.fragment;
 
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.abyte.wanandroid.R;
 import com.abyte.wanandroid.base.fragment.BaseFragment;

@@ -1,6 +1,7 @@
 package com.abyte.wanandroid.presenter.main;
 
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import com.abyte.wanandroid.base.Constant;
 import com.abyte.wanandroid.base.DataManager;

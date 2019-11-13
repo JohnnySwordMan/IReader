@@ -1,8 +1,9 @@
 package com.abyte.wanandroid.ui.project.fragment;
 
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.view.View;
+
+import androidx.viewpager.widget.ViewPager;
 
 import com.flyco.tablayout.SlidingTabLayout;
 import com.abyte.wanandroid.R;

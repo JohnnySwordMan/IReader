@@ -2,12 +2,13 @@ package com.abyte.wanandroid.ui.me.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
 
 import com.abyte.wanandroid.R;
 import com.abyte.wanandroid.base.fragment.BaseFragment;

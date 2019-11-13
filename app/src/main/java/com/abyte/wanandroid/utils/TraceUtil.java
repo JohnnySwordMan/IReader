@@ -1,6 +1,6 @@
 package com.abyte.wanandroid.utils;
 
-import android.support.v4.os.TraceCompat;
+import androidx.core.os.TraceCompat;
 import android.util.Log;
 
 import com.abyte.wanandroid.SmartApp;
