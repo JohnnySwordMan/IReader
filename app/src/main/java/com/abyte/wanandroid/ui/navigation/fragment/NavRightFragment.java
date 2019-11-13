@@ -1,8 +1,9 @@
 package com.abyte.wanandroid.ui.navigation.fragment;
 
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.reflect.TypeToken;
 import com.abyte.wanandroid.R;

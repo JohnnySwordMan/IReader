@@ -8,4 +8,6 @@
 
 ### 步骤  
 
-1. 搭建Dagger2+MVVM架构
+1. 搭建Dagger2+MVVM架构  
+
+* [x]migrate to AndroidX

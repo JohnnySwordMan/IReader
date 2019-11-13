@@ -1,11 +1,12 @@
 package com.abyte.wanandroid.base.activity;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
+import androidx.annotation.Nullable;
 
 import com.abyte.wanandroid.R;
 import com.abyte.wanandroid.base.presenter.AbstractPresenter;

@@ -24,7 +24,7 @@
         android:layout_height="1dp"
         android:background="#E5E5E5" />
 
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/knowledge_detail_view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
