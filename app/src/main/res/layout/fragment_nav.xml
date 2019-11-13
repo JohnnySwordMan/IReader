@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <com.jaygege.smartx.widget.verticaltablayout.VerticalTabLayout
+        <com.abyte.wanandroid.widget.verticaltablayout.VerticalTabLayout
             android:id="@+id/navigation_page_vertical_tab"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -27,7 +27,7 @@
             android:layout_height="match_parent"
             android:background="@color/common_line" />
 
-        <com.jaygege.smartx.widget.VerticalViewPager
+        <com.abyte.wanandroid.widget.VerticalViewPager
             android:id="@+id/navigation_page_view_pager"
             android:layout_width="0dp"
             android:layout_height="match_parent"

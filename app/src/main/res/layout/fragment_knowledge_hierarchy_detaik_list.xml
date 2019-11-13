@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.jaygege.smartx.widget.SwipeRefreshLayoutCompat
+    <com.abyte.wanandroid.widget.SwipeRefreshLayoutCompat
         android:id="@+id/knowledge_detail_list_swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -16,5 +16,5 @@
             android:background="@color/colorBackground"
             app:layoutManager="LinearLayoutManager" />
 
-    </com.jaygege.smartx.widget.SwipeRefreshLayoutCompat>
+    </com.abyte.wanandroid.widget.SwipeRefreshLayoutCompat>
 </FrameLayout>
