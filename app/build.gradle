@@ -10,7 +10,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-//apply plugin: 'kotlin-noarg'
 
 android {
     compileSdkVersion 28
@@ -78,9 +77,6 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1'
 
-    implementation 'org.slf4j:slf4j-api:1.7.21'
-    implementation 'org.slf4j:slf4j-simple:1.7.21'
-
 
     // CardView
     implementation 'androidx.cardview:cardview:1.0.0'
@@ -108,4 +104,6 @@ dependencies {
 
     // EventBus
     implementation 'org.greenrobot:eventbus:3.1.1'
+
+    implementation project(":common")
 }
